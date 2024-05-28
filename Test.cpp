@@ -404,3 +404,25 @@ TEST_CASE("Operators >,<,>=,<=,==,!=")
     CHECK((g5 == g6) == true);
     CHECK((g5 != g6) == false);
 }
+
+TEST_CASE("algorithms after operators")
+{
+    ariel::Graph g1;
+    vector<vector<int>> graph1 = {
+        {0, 1, 0, 0},
+        {1, 0, 1, 0},
+        {0, 1, 0, 1},
+        {0, 0, 1, 0}};
+    g1.loadGraph(graph1);
+
+    CHECK(ariel::Algorithms::isConnected(g1) == true);
+    CHECK(ariel::Algorithms::shortestPath(g1, 0, 2) == "0->1->2");
+    CHECK(ariel::Algorithms::isContainsCycle(g1) == "0");
+    CHECK(ariel::Algorithms::isBipartite(g1) == "The graph is bipartite: color1={0, 2}, color2={1, 3}.");
+    CHECK(ariel::Algorithms::negativeCycle(g1) == "The graph not contains negative cycle");
+    CHECK(ariel::Algorithms::shortestPath(g1, 1, 2) == "1->2");
+
+    g1 - 3; // after the subtract the graph well now contain a negative cycle.
+    CHECK(ariel::Algorithms::negativeCycle(g1) == "The graph contains negative cycle");
+    CHECK(ariel::Algorithms::shortestPath(g1, 1, 2) == "No shortest path because found negative cycle.");
+}
